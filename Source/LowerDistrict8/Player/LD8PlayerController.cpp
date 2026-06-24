@@ -1,0 +1,42 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "Player/LD8PlayerController.h"
+
+#include "EnhancedInputSubsystems.h"
+
+
+ALD8PlayerController::ALD8PlayerController()
+{
+
+}
+
+void ALD8PlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+
+	if (DefaultMappingContexts.IsEmpty())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[%s] DefaultMappingContexts is NULL"), *GetActorLabel());
+	}
+
+}
+
+void ALD8PlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+
+	// 로컬 플레이어 컨트롤러용 IMC만 추가
+	if (IsLocalPlayerController())
+	{
+		// 입력 매핑 컨텍스트 추가
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+		{
+			for (UInputMappingContext* CurrentContext : DefaultMappingContexts)
+			{
+				Subsystem->AddMappingContext(CurrentContext, 0);
+			}
+		}
+	}
+}
