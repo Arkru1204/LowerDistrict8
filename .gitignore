@@ -74,5 +74,5 @@ Plugins/**/Intermediate/*
 DerivedDataCache/*
 
 #AssetPacks (Put AssetPacks.zip into path)
-Content/AssetPacks/*
-*.zip
+#Content/AssetPacks/*
+#*.zip
