@@ -24,8 +24,8 @@ ALD8PlayerCharacter::ALD8PlayerCharacter()
 	// 카메라 붐 생성 (캐릭터 뒤에 위치시키기 위함)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 400.0f;
-	CameraBoom->SetRelativeLocation(FVector(0.0f, 0.0f, 75.0f)); // 캐릭터 머리 위쪽에 위치
+	CameraBoom->TargetArmLength = 300.0f;
+	CameraBoom->SetRelativeLocation(FVector(0.0f, 75.0f, 75.0f)); // 캐릭터 머리 위쪽에 위치
 	CameraBoom->bUsePawnControlRotation = true; // 컨트롤러 회전에 따라 회전
 
 	// 팔로우 카메라 생성
@@ -56,6 +56,13 @@ void ALD8PlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// 컴포넌트 값 확인
+	if (MoveAction == NULL)
+		UE_LOG(LogTemp, Warning, TEXT("[%s] MoveAction is NULL"), *GetActorLabel());
+	if (LookAction == NULL)
+		UE_LOG(LogTemp, Warning, TEXT("[%s] LookAction is NULL"), *GetActorLabel());
+	if (JumpAction == NULL)
+		UE_LOG(LogTemp, Warning, TEXT("[%s] JumpAction is NULL"), *GetActorLabel());
 }
 
 // Called every frame
@@ -80,6 +87,9 @@ void ALD8PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 		// Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ALD8PlayerCharacter::DoJumpStart);
+
+		// Change View
+		EnhancedInputComponent->BindAction(ChangeViewAction, ETriggerEvent::Started, this, &ALD8PlayerCharacter::ChangeView);
 	}
 }
 
@@ -103,4 +113,10 @@ void ALD8PlayerCharacter::LookInput(const FInputActionValue& Value)
 void ALD8PlayerCharacter::JumpInput()
 {
 	DoJumpStart();
+}
+
+void ALD8PlayerCharacter::ChangeView()
+{
+	bIsLeftView = !bIsLeftView;
+	CameraBoom->SetRelativeLocation(FVector(0.0f, bIsLeftView ? 75.0f : -75.0f, 75.0f));
 }

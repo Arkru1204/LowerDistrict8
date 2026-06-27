@@ -26,22 +26,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
-	/* ==================== Properties ==================== */
-protected:
-	/* 이동 InputAction */
-	UPROPERTY(EditAnywhere, Category = "Components|Input Action")
-	class UInputAction* MoveAction;
-
-	/* 카메라 이동, 회전 InputAction */
-	UPROPERTY(EditAnywhere, Category = "Components|Input Action")
-	class UInputAction* LookAction;
-
-	/* 점프 InputAction */
-	UPROPERTY(EditAnywhere, Category = "Components|Input Action")
-	class UInputAction* JumpAction;
-
-
 	/* ==================== Properties ==================== */
 protected:
 	/* 최대 HP */

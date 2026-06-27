@@ -30,6 +30,25 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
+	/* ==================== Properties ==================== */
+private:
+	/* 이동 InputAction */
+	UPROPERTY(EditAnywhere, Category = "Components|Input Action")
+	class UInputAction* MoveAction;
+
+	/* 카메라 이동, 회전 InputAction */
+	UPROPERTY(EditAnywhere, Category = "Components|Input Action")
+	class UInputAction* LookAction;
+
+	/* 점프 InputAction */
+	UPROPERTY(EditAnywhere, Category = "Components|Input Action")
+	class UInputAction* JumpAction;
+
+	/* 카메라 시점 변경 InputAction */
+	UPROPERTY(EditAnywhere, Category = "Components|Input Action")
+	class UInputAction* ChangeViewAction;
+
+
 	/* ==================== Components ==================== */
 private:
 	/* 입력 처리용 컨트롤러 */
@@ -52,11 +71,19 @@ public:
 	/* Returns FollowCamera subobject */
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+
 	/* ==================== Input ==================== */
+private:
 	/* Move InputAction이 감지 될 때 호출되는 함수 */
 	void MoveInput(const struct FInputActionValue& Value);
 	/* Look InputAction이 감지 될 때 호출되는 함수 */
 	void LookInput(const struct FInputActionValue& Value);
 	/* Jump InputAction이 감지 될 때 호출되는 함수 */
 	void JumpInput();
+	/* ChangeView InputAction이 감지 될 때 호출되는 함수 */
+	void ChangeView();
+
+private:
+	/* 시점 변경 처리 변수 */
+	bool bIsLeftView = true;
 };

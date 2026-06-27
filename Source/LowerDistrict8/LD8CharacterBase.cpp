@@ -20,14 +20,6 @@ void ALD8CharacterBase::BeginPlay()
 	Super::BeginPlay();
 
 	UE_LOG(LogTemp, Warning, TEXT("[%s] Generate"), *GetActorLabel());
-	
-	// 컴포넌트 값 확인
-	if (MoveAction == NULL)
-		UE_LOG(LogTemp, Warning, TEXT("[%s] MoveAction is NULL"), *GetActorLabel());
-	if (LookAction == NULL)
-		UE_LOG(LogTemp, Warning, TEXT("[%s] LookAction is NULL"), *GetActorLabel());
-	if (JumpAction == NULL)
-		UE_LOG(LogTemp, Warning, TEXT("[%s] JumpAction is NULL"), *GetActorLabel());
 }
 
 void ALD8CharacterBase::Tick(float DeltaTime)
