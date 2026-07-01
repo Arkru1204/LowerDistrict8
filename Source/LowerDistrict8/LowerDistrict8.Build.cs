@@ -26,7 +26,8 @@ public class LowerDistrict8 : ModuleRules
             "LowerDistrict8/Interface",
             "LowerDistrict8/UI",
             "LowerDistrict8/GameMode",
-            "LowerDistrict8/Animation"
+            "LowerDistrict8/Animation",
+            "LowerDistrict8/Weapon",
         });
 
         // Uncomment if you are using Slate UI

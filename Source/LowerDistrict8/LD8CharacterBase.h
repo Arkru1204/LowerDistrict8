@@ -44,6 +44,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Propertys|State")
 	float JumpPowerScale = 1.0f;
 
+	/* 무기 소켓 이름 */
+	UPROPERTY(EditAnywhere, Category = "Propertys|Weapons")
+	FName WeaponSocket = FName("HandGrip_R");
+
 
 	/* ==================== Movement ==================== */
 protected:
