@@ -19,6 +19,9 @@ ALD8Gun::ALD8Gun()
 
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(Root);
+
+	Muzzle = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Muzzle"));
+	Muzzle->SetupAttachment(Mesh);
 }
 
 void ALD8Gun::BeginPlay()
@@ -35,8 +38,8 @@ void ALD8Gun::Tick(float DeltaTime)
 
 void ALD8Gun::PullTrigger()
 {
-	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));	// 총구 섬광 스폰 후 붙이기
-	UGameplayStatics::SpawnSoundAttached(MuzzleSound, Mesh, TEXT("MuzzleFlashSocket"));		// 총구 사운드 스폰 후 붙이기
+	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Muzzle, TEXT("MuzzleFlashSocket"));	// 총구 섬광 스폰 후 붙이기
+	UGameplayStatics::SpawnSoundAttached(MuzzleSound, Muzzle, TEXT("MuzzleFlashSocket"));	// 총구 사운드 스폰 후 붙이기
 
 	FHitResult Hit;
 	FVector ShotDirection;

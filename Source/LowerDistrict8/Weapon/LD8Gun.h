@@ -54,6 +54,9 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* Mesh;
 
+	UPROPERTY(VisibleAnywhere, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* Muzzle;
+
 
 	/* ==================== Functions ==================== */
 private:

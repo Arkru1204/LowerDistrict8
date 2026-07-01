@@ -63,6 +63,10 @@ void ALD8PlayerCharacter::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("[%s] LookAction is NULL"), *GetActorLabel());
 	if (JumpAction == NULL)
 		UE_LOG(LogTemp, Warning, TEXT("[%s] JumpAction is NULL"), *GetActorLabel());
+	if (ChangeViewAction == NULL)
+		UE_LOG(LogTemp, Warning, TEXT("[%s] ChangeViewAction is NULL"), *GetActorLabel());
+	if (ShootAction == NULL)
+		UE_LOG(LogTemp, Warning, TEXT("[%s] ShootAction is NULL"), *GetActorLabel());
 }
 
 // Called every frame
@@ -90,6 +94,9 @@ void ALD8PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 		// Change View
 		EnhancedInputComponent->BindAction(ChangeViewAction, ETriggerEvent::Started, this, &ALD8PlayerCharacter::ChangeView);
+
+		// Shoot
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &ALD8PlayerCharacter::ShootInput);
 	}
 }
 
@@ -119,4 +126,9 @@ void ALD8PlayerCharacter::ChangeView()
 {
 	bIsLeftView = !bIsLeftView;
 	CameraBoom->SetRelativeLocation(FVector(0.0f, bIsLeftView ? 75.0f : -75.0f, 75.0f));
+}
+
+void ALD8PlayerCharacter::ShootInput()
+{
+	Shoot();
 }

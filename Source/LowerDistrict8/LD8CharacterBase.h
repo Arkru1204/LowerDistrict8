@@ -26,6 +26,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
 	/* ==================== Properties ==================== */
 protected:
 	/* 최대 HP */
@@ -48,6 +49,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Propertys|Weapons")
 	FName WeaponSocket = FName("HandGrip_R");
 
+	/* 총 클래스 */
+	UPROPERTY(EditDefaultsOnly, Category = "Propertys|Weapons")
+	TSubclassOf<class ALD8Gun> GunClass; // Gun 클래스의 파생 클래스만 할당 가능
+
 
 	/* ==================== Movement ==================== */
 protected:
@@ -62,10 +67,14 @@ protected:
 
 
 	/* ==================== Attack ==================== */
-//protected:
-	//UPROPERTY(EditDefaultsOnly)
-	//TSubclassOf<AGun> GunClass; // Gun 클래스의 파생 클래스만 할당 가능
+protected:
+	/* 총 클래스 */
+	UPROPERTY()
+	class ALD8Gun* Gun;
 
-	//UPROPERTY()
-	//AGun* Gun;
+protected:
+	/* 총 생성 함수 */
+	void SpawnGun();
+	/* 실제 공격 처리 함수 */
+	void Shoot();
 };

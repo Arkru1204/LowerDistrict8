@@ -48,6 +48,10 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Components|Input Action")
 	class UInputAction* ChangeViewAction;
 
+	/* 발사 InputAction */
+	UPROPERTY(EditAnywhere, Category = "Components|Input Action")
+	class UInputAction* ShootAction;
+
 
 	/* ==================== Components ==================== */
 private:
@@ -82,6 +86,8 @@ private:
 	void JumpInput();
 	/* ChangeView InputAction이 감지 될 때 호출되는 함수 */
 	void ChangeView();
+	/* Shoot InputAction이 감지 될 때 호출되는 함수 */
+	void ShootInput();
 
 private:
 	/* 시점 변경 처리 변수 */

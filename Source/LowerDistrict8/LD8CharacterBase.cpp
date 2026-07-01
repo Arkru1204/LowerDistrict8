@@ -5,6 +5,8 @@
 
 #include "InputActionValue.h"
 
+#include "Weapon/LD8Gun.h"
+
 
 /* ==================== CharacterBase Lifecycle ==================== */
 
@@ -20,6 +22,8 @@ void ALD8CharacterBase::BeginPlay()
 	Super::BeginPlay();
 
 	UE_LOG(LogTemp, Warning, TEXT("[%s] Generate"), *GetActorLabel());
+
+	SpawnGun();
 }
 
 void ALD8CharacterBase::Tick(float DeltaTime)
@@ -61,3 +65,20 @@ void ALD8CharacterBase::DoJumpEnd()
 
 
 /* ==================== Attack ==================== */
+void ALD8CharacterBase::SpawnGun()
+{
+	if (GunClass == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[%s] GunClass is NULL"), *GetActorLabel());
+		return;
+	}
+
+	Gun = GetWorld()->SpawnActor<ALD8Gun>(GunClass);
+	Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, WeaponSocket);
+	Gun->SetOwner(this);
+}
+
+void ALD8CharacterBase::Shoot()
+{
+	Gun->PullTrigger();
+}
