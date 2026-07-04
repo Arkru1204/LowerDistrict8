@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 
 #include "Weapon/LD8Gun.h"
+#include "GameMode/LD8GameModeBase.h"
 
 
 /* ==================== CharacterBase Lifecycle ==================== */
@@ -108,11 +109,11 @@ float ALD8CharacterBase::TakeDamage(float DamageAmount, struct FDamageEvent cons
 
 	if (IsDead())
 	{
-		//ASimpleShooterGameModeBase* GameMode = GetWorld()->GetAuthGameMode<ASimpleShooterGameModeBase>();
-		//if (GameMode != nullptr)
-		//{
-		//	GameMode->PawnKilled(this);
-		//}
+		ALD8GameModeBase* GameMode = GetWorld()->GetAuthGameMode<ALD8GameModeBase>();
+		if (GameMode != nullptr)
+		{
+			GameMode->PawnKilled(this);
+		}
 
 		DetachFromControllerPendingDestroy(); // 컨트롤러 연결 해제
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision); // 콜리전 비활성화

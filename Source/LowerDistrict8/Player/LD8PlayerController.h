@@ -25,6 +25,10 @@ protected:
 	/* 입력 매핑 컨텍스트 설정 */
 	virtual void SetupInputComponent() override;
 
+public:
+	/* 게임 종료 시 호출되는 함수 */
+	virtual void GameHasEnded(class AActor* EndGameFocus = nullptr, bool bIsWinner = false) override;
+
 private:
 	/* 입력 매핑 컨텍스트 */
 	UPROPERTY(EditAnywhere, Category = "Components")
