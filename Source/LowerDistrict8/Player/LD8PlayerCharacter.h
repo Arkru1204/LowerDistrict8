@@ -33,23 +33,23 @@ public:
 	/* ==================== Properties ==================== */
 private:
 	/* 이동 InputAction */
-	UPROPERTY(EditAnywhere, Category = "Components|Input Action")
+	UPROPERTY(EditAnywhere, Category = "Properties|Input Action")
 	class UInputAction* MoveAction;
 
 	/* 카메라 이동, 회전 InputAction */
-	UPROPERTY(EditAnywhere, Category = "Components|Input Action")
+	UPROPERTY(EditAnywhere, Category = "Properties|Input Action")
 	class UInputAction* LookAction;
 
 	/* 점프 InputAction */
-	UPROPERTY(EditAnywhere, Category = "Components|Input Action")
+	UPROPERTY(EditAnywhere, Category = "Properties|Input Action")
 	class UInputAction* JumpAction;
 
 	/* 카메라 시점 변경 InputAction */
-	UPROPERTY(EditAnywhere, Category = "Components|Input Action")
+	UPROPERTY(EditAnywhere, Category = "Properties|Input Action")
 	class UInputAction* ChangeViewAction;
 
 	/* 발사 InputAction */
-	UPROPERTY(EditAnywhere, Category = "Components|Input Action")
+	UPROPERTY(EditAnywhere, Category = "Properties|Input Action")
 	class UInputAction* ShootAction;
 
 

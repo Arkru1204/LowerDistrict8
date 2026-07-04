@@ -65,6 +65,7 @@ void ALD8CharacterBase::DoJumpEnd()
 
 
 /* ==================== Attack ==================== */
+
 void ALD8CharacterBase::SpawnGun()
 {
 	if (GunClass == nullptr)
@@ -81,4 +82,17 @@ void ALD8CharacterBase::SpawnGun()
 void ALD8CharacterBase::Shoot()
 {
 	Gun->PullTrigger();
+}
+
+
+/* ==================== Health ==================== */
+
+bool ALD8CharacterBase::IsDead() const
+{
+	return CurrentHP <= 0;
+}
+
+float ALD8CharacterBase::GetHealthPercent() const
+{
+	return CurrentHP / MaxHP;
 }

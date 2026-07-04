@@ -38,19 +38,19 @@ protected:
 	float CurrentHP = MaxHP;
 
 	/* 이동 속도 스케일 값 */
-	UPROPERTY(EditAnywhere, Category = "Propertys|State")
+	UPROPERTY(EditAnywhere, Category = "Properties|State")
 	float MoveSpeedScale = 1.0f;	
 
 	/* 점프력 스케일 값 */
-	UPROPERTY(EditAnywhere, Category = "Propertys|State")
+	UPROPERTY(EditAnywhere, Category = "Properties|State")
 	float JumpPowerScale = 1.0f;
 
 	/* 무기 소켓 이름 */
-	UPROPERTY(EditAnywhere, Category = "Propertys|Weapons")
+	UPROPERTY(EditAnywhere, Category = "Properties|Weapons")
 	FName WeaponSocket = FName("HandGrip_R");
 
 	/* 총 클래스 */
-	UPROPERTY(EditDefaultsOnly, Category = "Propertys|Weapons")
+	UPROPERTY(EditDefaultsOnly, Category = "Properties|Weapons")
 	TSubclassOf<class ALD8Gun> GunClass; // Gun 클래스의 파생 클래스만 할당 가능
 
 
@@ -75,6 +75,18 @@ protected:
 protected:
 	/* 총 생성 함수 */
 	void SpawnGun();
+public:
 	/* 실제 공격 처리 함수 */
 	void Shoot();
+
+
+	/* ==================== Health ==================== */
+public:
+	/* 현재 HP가 0인지 확인 */
+	UFUNCTION(BlueprintPure)
+	bool IsDead() const;
+
+	/* 현재 HP 비율 반환 */
+	UFUNCTION(BlueprintPure)
+	float GetHealthPercent() const;
 };
