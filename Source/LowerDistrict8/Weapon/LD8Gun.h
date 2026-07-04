@@ -45,6 +45,12 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Propertys|Setting")
 	float Damage = 10;
 
+	UPROPERTY(EditAnywhere, Category = "Propertys|Projectile")
+	TSubclassOf<class ALD8Projectile> ProjectileClass;
+
+	UPROPERTY(EditAnywhere, Category = "Propertys|Projectile")
+	float AimRange = 5000.0f;
+
 
 	/* ==================== Components ==================== */
 private:
@@ -61,7 +67,10 @@ private:
 	/* ==================== Functions ==================== */
 private:
 	/* 총알이 맞았는지 여부 */
-	bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
+	//bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
+
+	/* 투사체 발사 방향 반환 */
+	FVector GetProjectileDirection() const;
 
 	/* 총을 소유한 컨트롤러 반환 */
 	AController* GetOwnerController() const;

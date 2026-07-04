@@ -83,6 +83,12 @@ void ALD8CharacterBase::SpawnGun()
 
 void ALD8CharacterBase::Shoot()
 {
+	if (Gun == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[%s] Gun is NULL"), *GetActorLabel());
+		return;
+	}
+
 	Gun->PullTrigger();
 }
 
