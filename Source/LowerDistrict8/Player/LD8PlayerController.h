@@ -30,4 +30,11 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Components")
 	TArray<class UInputMappingContext*> DefaultMappingContexts;
 
+	/* HUD 위젯 클래스 */
+	UPROPERTY(EditAnywhere, Category = "Properties|UI")
+	TSubclassOf<class UUserWidget> HUDWidgetClass;
+
+	/* 생성된 HUD 위젯 */
+	UPROPERTY()
+	class UUserWidget* HUDWidget;
 };

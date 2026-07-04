@@ -4,6 +4,7 @@
 #include "Player/LD8PlayerController.h"
 
 #include "EnhancedInputSubsystems.h"
+#include "Blueprint/UserWidget.h"
 
 
 ALD8PlayerController::ALD8PlayerController()
@@ -21,6 +22,23 @@ void ALD8PlayerController::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("[%s] DefaultMappingContexts is NULL"), *GetActorLabel());
 	}
 
+	// HUD 생성
+	if (IsLocalPlayerController()) // 로컬 플레이어 컨트롤러에서만
+	{
+		if (HUDWidgetClass != nullptr)
+		{
+			HUDWidget = CreateWidget<UUserWidget>(this, HUDWidgetClass);
+
+			if (HUDWidget != nullptr)
+			{
+				HUDWidget->AddToViewport();
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("[%s] HUDWidgetClass is NULL"), *GetActorLabel());
+		}
+	}
 }
 
 void ALD8PlayerController::SetupInputComponent()
