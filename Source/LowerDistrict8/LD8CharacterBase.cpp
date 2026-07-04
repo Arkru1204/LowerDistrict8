@@ -4,6 +4,7 @@
 #include "LD8CharacterBase.h"
 
 #include "InputActionValue.h"
+#include "Components/CapsuleComponent.h"
 
 #include "Weapon/LD8Gun.h"
 
@@ -95,4 +96,27 @@ bool ALD8CharacterBase::IsDead() const
 float ALD8CharacterBase::GetHealthPercent() const
 {
 	return CurrentHP / MaxHP;
+}
+
+float ALD8CharacterBase::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+	float DamageToApply = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	DamageToApply = FMath::Min(CurrentHP, DamageToApply); // CurrentHP보다 데미지가 클 경우 CurrentHP만큼만 데미지 적용
+	CurrentHP -= DamageToApply;
+
+	UE_LOG(LogTemp, Warning, TEXT("[%s] Health left: %f"), *GetActorLabel(), CurrentHP);
+
+	if (IsDead())
+	{
+		//ASimpleShooterGameModeBase* GameMode = GetWorld()->GetAuthGameMode<ASimpleShooterGameModeBase>();
+		//if (GameMode != nullptr)
+		//{
+		//	GameMode->PawnKilled(this);
+		//}
+
+		DetachFromControllerPendingDestroy(); // 컨트롤러 연결 해제
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision); // 콜리전 비활성화
+	}
+
+	return DamageToApply;
 }

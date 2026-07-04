@@ -89,4 +89,7 @@ public:
 	/* 현재 HP 비율 반환 */
 	UFUNCTION(BlueprintPure)
 	float GetHealthPercent() const;
+
+	/* 데미지 처리 함수 */
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 };
