@@ -5,9 +5,11 @@
 
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/PrimitiveComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/DamageEvents.h"
+
 
 
 /* ==================== Projectile Lifecycle ==================== */
@@ -20,11 +22,19 @@ ALD8Projectile::ALD8Projectile()
 	SetRootComponent(Collision);
 
 	Collision->InitSphereRadius(5.0f);
-	Collision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);				// 충돌 활성화
-	Collision->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);			// 충돌 채널 설정
-	Collision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);	// 모든 채널에 대해 충돌 응답을 Block으로 설정
-	Collision->SetGenerateOverlapEvents(false);										// 오버랩 이벤트 비활성화
-	Collision->SetNotifyRigidBodyCollision(true);									// 충돌 이벤트 알림 활성화
+
+	Collision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);			// 충돌은 쿼리만 허용하고 물리 시뮬레이션은 비활성화
+	Collision->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic); // 충돌 채널을 월드 다이나믹으로 설정
+
+	// 충돌 응답 설정: 모든 채널에 대해 무시, 월드 스태틱, 월드 다이나믹, 폰에 대해 블록, 카메라에 대해 무시
+	Collision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	Collision->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block);
+	Collision->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Block);
+	Collision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
+	Collision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+
+	Collision->SetGenerateOverlapEvents(false);								// 오버랩 이벤트 비활성화
+	Collision->SetNotifyRigidBodyCollision(true);							// 충돌 이벤트 알림 활성화
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(Collision);
@@ -44,9 +54,17 @@ void ALD8Projectile::BeginPlay()
 	
 	Collision->OnComponentHit.AddDynamic(this, &ALD8Projectile::OnHit); // 충돌 이벤트에 대한 콜백 함수 등록
 
-	if (GetOwner() != nullptr)
+	AActor* OwnerActor = GetOwner();
+	if (OwnerActor != nullptr)
 	{
-		Collision->IgnoreActorWhenMoving(GetOwner(), true); // 투사체를 발사한 액터와의 충돌 무시
+		// 총알이 움직일 때 발사자를 무시
+		Collision->IgnoreActorWhenMoving(OwnerActor, true);
+
+		// 발사자가 움직일 때도 이 총알을 무시
+		if (UPrimitiveComponent* OwnerRootComponent = Cast<UPrimitiveComponent>(OwnerActor->GetRootComponent()))
+		{
+			OwnerRootComponent->IgnoreActorWhenMoving(this, true);
+		}
 	}
 
 	ProjectileMovement->InitialSpeed = Speed;
