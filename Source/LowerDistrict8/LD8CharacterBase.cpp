@@ -81,15 +81,15 @@ void ALD8CharacterBase::SpawnGun()
 	Gun->SetOwner(this);
 }
 
-void ALD8CharacterBase::Shoot()
+bool ALD8CharacterBase::Shoot()
 {
 	if (Gun == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("[%s] Gun is NULL"), *GetActorLabel());
-		return;
+		return false;
 	}
 
-	Gun->PullTrigger();
+	return Gun->PullTrigger();
 }
 
 

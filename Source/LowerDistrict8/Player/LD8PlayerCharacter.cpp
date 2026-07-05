@@ -6,6 +6,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
+#include "Camera/CameraShakeBase.h"
+#include "Camera/PlayerCameraManager.h"
+#include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -140,7 +143,10 @@ void ALD8PlayerCharacter::ChangeView()
 
 void ALD8PlayerCharacter::ShootInput()
 {
-	Shoot();
+	if (Shoot())
+	{
+		OnShotFired();
+	}
 }
 
 void ALD8PlayerCharacter::Skill()
@@ -152,4 +158,36 @@ void ALD8PlayerCharacter::Skill()
 	}
 
 	SkillComponent->UseSkill();
+}
+
+/* ==================== Runtime ==================== */
+
+void ALD8PlayerCharacter::OnShotFired()
+{
+	PlayFireCameraShake();
+}
+
+void ALD8PlayerCharacter::PlayFireCameraShake()
+{
+	// 카메라 쉐이크가 설정되어 있지 않으면 종료
+	if (FireCameraShake == nullptr)
+	{
+		return;
+	}
+
+	// 로컬 플레이어 컨트롤러가 아니면 종료
+	APlayerController* PC = Cast<APlayerController>(GetController());
+	if (PC == nullptr || !PC->IsLocalController())
+	{
+		return;
+	}
+
+	// 카메라 매니저가 없으면 종료
+	if (PC->PlayerCameraManager == nullptr)
+	{
+		return;
+	}
+
+	// 카메라 쉐이크 실행
+	PC->PlayerCameraManager->StartCameraShake(FireCameraShake, FireCameraShakeScale);
 }

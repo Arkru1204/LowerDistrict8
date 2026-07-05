@@ -38,13 +38,13 @@ void ALD8Gun::Tick(float DeltaTime)
 
 }
 
-void ALD8Gun::PullTrigger()
+bool ALD8Gun::PullTrigger()
 {
 	// 발사 간격 체크
 	const float CurrentTime = GetWorld()->GetTimeSeconds();
 	if (CurrentTime - LastFireTime < FireInterval)
 	{
-		return;
+		return false;
 	}
 	LastFireTime = CurrentTime;
 
@@ -56,7 +56,7 @@ void ALD8Gun::PullTrigger()
 	if (ProjectileClass == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("[%s] ProjectileClass is NULL"), *GetActorLabel());
-		return;
+		return false;
 	}
 
 	// 총구 위치와 투사체 방향 계산
@@ -78,11 +78,13 @@ void ALD8Gun::PullTrigger()
 		SpawnParams
 	);
 
-	// 투사체 초기화 호출
-	if (Projectile != nullptr)
+	// 투사체 초기화
+	if (Projectile == nullptr)
 	{
-		Projectile->InitProjectile(Damage, GetOwnerController());
+		return false;
 	}
+	Projectile->InitProjectile(Damage, GetOwnerController());
+	return true;
 }
 
 //bool ALD8Gun::GunTrace(FHitResult& Hit, FVector& ShotDirection)

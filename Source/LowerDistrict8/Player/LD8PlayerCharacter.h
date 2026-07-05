@@ -83,6 +83,14 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Properties|Input Action")
 	class UInputAction* SkillAction;
 
+	/* 발사 시 카메라 쉐이크 */
+	UPROPERTY(EditAnywhere, Category = "Properties|Recoil")
+	TSubclassOf<class UCameraShakeBase> FireCameraShake;
+
+	/* 카메라 쉐이크 강도 */
+	UPROPERTY(EditAnywhere, Category = "Properties|Recoil")
+	float FireCameraShakeScale = 1.0f;
+
 
 	/* ==================== Input ==================== */
 private:
@@ -99,7 +107,13 @@ private:
 	/* Skill InputAction이 감지 될 때 호출되는 함수 */
 	void Skill();
 
+	/* ==================== Runtime ==================== */
 private:
 	/* 시점 변경 처리 변수 */
 	bool bIsLeftView = true;
+
+	/* 발사 성공 시 플레이어 피드백 처리 */
+	void OnShotFired();
+	/* 카메라 쉐이크 재생 */
+	void PlayFireCameraShake();
 };

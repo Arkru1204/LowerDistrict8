@@ -77,7 +77,7 @@ protected:
 	void SpawnGun();
 public:
 	/* 실제 공격 처리 함수 */
-	void Shoot();
+	bool Shoot();
 
 
 	/* ==================== Health ==================== */

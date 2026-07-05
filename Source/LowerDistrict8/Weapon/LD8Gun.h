@@ -80,7 +80,7 @@ private:
 
 public:
 	/* 공격 시 호출되는 함수 */
-	void PullTrigger();
+	bool PullTrigger();
 
 private:
 	/* 마지막 발사 시간 */
