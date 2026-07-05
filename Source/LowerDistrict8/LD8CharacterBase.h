@@ -30,11 +30,11 @@ public:
 	/* ==================== Properties ==================== */
 protected:
 	/* 최대 HP */
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, Category = "Properties|State")
 	float MaxHP = 100;
 
 	/* 현재 HP */
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Properties|State")
 	float CurrentHP = MaxHP;
 
 	/* 이동 속도 스케일 값 */

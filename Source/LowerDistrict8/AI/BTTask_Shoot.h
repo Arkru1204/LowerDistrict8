@@ -20,4 +20,8 @@ public:
 protected:
 	/* CharacterBase Shoot() 함수 실행 */
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
+private:
+	UPROPERTY(EditAnywhere, Category = "Properties|Aim")
+	float AimHeightOffset = 70.0f;
 };
