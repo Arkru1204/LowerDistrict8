@@ -40,9 +40,19 @@ void ALD8Gun::Tick(float DeltaTime)
 
 void ALD8Gun::PullTrigger()
 {
-	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Muzzle);	// 총구 섬광 스폰 후 붙이기
-	UGameplayStatics::SpawnSoundAttached(MuzzleSound, Muzzle);	// 총구 사운드 스폰 후 붙이기
+	// 발사 간격 체크
+	const float CurrentTime = GetWorld()->GetTimeSeconds();
+	if (CurrentTime - LastFireTime < FireInterval)
+	{
+		return;
+	}
+	LastFireTime = CurrentTime;
 
+	// 총구 섬광과 사운드 스폰
+	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Muzzle);
+	UGameplayStatics::SpawnSoundAttached(MuzzleSound, Muzzle);
+
+	// 투사체 클래스 체크
 	if (ProjectileClass == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("[%s] ProjectileClass is NULL"), *GetActorLabel());

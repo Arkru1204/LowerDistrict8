@@ -45,6 +45,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Propertys|Setting")
 	float Damage = 10;
 
+	UPROPERTY(EditAnywhere, Category = "Propertys|Setting")
+	float FireInterval = 0.1f;
+
 	UPROPERTY(EditAnywhere, Category = "Propertys|Projectile")
 	TSubclassOf<class ALD8Projectile> ProjectileClass;
 
@@ -66,7 +69,7 @@ private:
 
 	/* ==================== Functions ==================== */
 private:
-	/* 총알이 맞았는지 여부 */
+	/* 히트스캔 총알이 맞았는지 여부 */
 	//bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
 
 	/* 투사체 발사 방향 반환 */
@@ -78,4 +81,8 @@ private:
 public:
 	/* 공격 시 호출되는 함수 */
 	void PullTrigger();
+
+private:
+	/* 마지막 발사 시간 */
+	float LastFireTime = -999.0f;
 };
