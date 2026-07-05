@@ -9,6 +9,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+#include "Player/LD8SkillComponent.h"
+
 
 /* ==================== CharacterBase Lifecycle ==================== */
 
@@ -32,6 +34,9 @@ ALD8PlayerCharacter::ALD8PlayerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false; // 카메라가 컨트롤러 회전에 따라 회전하지 않음
+
+	// 스킬 컴포넌트 생성
+	SkillComponent = CreateDefaultSubobject<ULD8SkillComponent>(TEXT("SkillComponent"));
 
 	// 초기 상태 설정
 	MaxHP = 100.0f;
@@ -67,6 +72,8 @@ void ALD8PlayerCharacter::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("[%s] ChangeViewAction is NULL"), *GetActorLabel());
 	if (ShootAction == NULL)
 		UE_LOG(LogTemp, Warning, TEXT("[%s] ShootAction is NULL"), *GetActorLabel());
+	if (SkillAction == NULL)
+		UE_LOG(LogTemp, Warning, TEXT("[%s] SkillAction is NULL"), *GetActorLabel());
 }
 
 // Called every frame
@@ -97,6 +104,9 @@ void ALD8PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 		// Shoot
 		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &ALD8PlayerCharacter::ShootInput);
+
+		// Skill
+		EnhancedInputComponent->BindAction(SkillAction, ETriggerEvent::Started, this, &ALD8PlayerCharacter::Skill);
 	}
 }
 
@@ -131,4 +141,15 @@ void ALD8PlayerCharacter::ChangeView()
 void ALD8PlayerCharacter::ShootInput()
 {
 	Shoot();
+}
+
+void ALD8PlayerCharacter::Skill()
+{
+	if (SkillComponent == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[%s] SkillComponent is NULL"), *GetActorLabel());
+		return;
+	}
+
+	SkillComponent->UseSkill();
 }

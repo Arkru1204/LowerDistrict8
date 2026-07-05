@@ -30,6 +30,33 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
+	/* ==================== Player Character Getters ==================== */
+public:
+	/* Returns CameraBoom subobject */
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	/* Returns FollowCamera subobject */
+	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+
+	/* ==================== Components ==================== */
+private:
+	/* 입력 처리용 컨트롤러 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	APlayerController* PlayerController;
+
+	/* 카메라-캐릭터 간 거리 유지, 카메라 회전에 사용 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	class USpringArmComponent* CameraBoom;
+
+	/* 실제 카메라 컴포넌트 (CameraBoom의 자식) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	class UCameraComponent* FollowCamera;
+
+	/* 스킬 처리 컴포넌트 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	class ULD8SkillComponent* SkillComponent;
+
+
 	/* ==================== Properties ==================== */
 private:
 	/* 이동 InputAction */
@@ -52,28 +79,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Properties|Input Action")
 	class UInputAction* ShootAction;
 
-
-	/* ==================== Components ==================== */
-private:
-	/* 입력 처리용 컨트롤러 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-	APlayerController* PlayerController;
-
-	/* 카메라-캐릭터 간 거리 유지, 카메라 회전에 사용 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
-
-	/* 실제 카메라 컴포넌트 (CameraBoom의 자식) */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* FollowCamera;
-
-
-	/* ==================== Player Character Getters ==================== */
-public:
-	/* Returns CameraBoom subobject */
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	/* Returns FollowCamera subobject */
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	/* 스킬 InputAction */
+	UPROPERTY(EditAnywhere, Category = "Properties|Input Action")
+	class UInputAction* SkillAction;
 
 
 	/* ==================== Input ==================== */
@@ -88,6 +96,8 @@ private:
 	void ChangeView();
 	/* Shoot InputAction이 감지 될 때 호출되는 함수 */
 	void ShootInput();
+	/* Skill InputAction이 감지 될 때 호출되는 함수 */
+	void Skill();
 
 private:
 	/* 시점 변경 처리 변수 */
