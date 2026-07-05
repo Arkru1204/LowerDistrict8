@@ -4,14 +4,21 @@
 #include "UI/LD8HUDWidget.h"
 
 #include "LD8CharacterBase.h"
+#include "Player/LD8SkillComponent.h"
 
+
+/* ==================== Lifecycle ==================== */
 
 void ULD8HUDWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
 	PlayerPawn = Cast<ALD8CharacterBase>(GetOwningPlayerPawn());
+	UpdateSkillComponent();
 }
+
+
+/* ==================== Health Functions ==================== */
 
 float ULD8HUDWidget::GetHealth() const
 {
@@ -29,4 +36,39 @@ float ULD8HUDWidget::GetHealth() const
 	}
 
 	return Character->GetHealthPercent();
+}
+
+
+/* ==================== Skill Functions ==================== */
+
+void ULD8HUDWidget::UpdateSkillComponent()
+{
+	APawn* OwningPawn = GetOwningPlayerPawn();
+	if (OwningPawn == nullptr)
+	{
+		SkillComponent = nullptr;
+		return;
+	}
+
+	SkillComponent = OwningPawn->FindComponentByClass<ULD8SkillComponent>();
+}
+
+float ULD8HUDWidget::GetSkillCooldownPercent() const
+{
+	return SkillComponent ? SkillComponent->GetSkillCooldownPercent() : 0.0f;
+}
+
+float ULD8HUDWidget::GetSkillDurationPercent() const
+{
+	return SkillComponent ? SkillComponent->GetOverclockDurationPercent() : 0.0f;
+}
+
+bool ULD8HUDWidget::IsSkillReady() const
+{
+	return SkillComponent ? SkillComponent->IsSkillReady() : false;
+}
+
+bool ULD8HUDWidget::IsSkillActive() const
+{
+	return SkillComponent ? SkillComponent->IsOverclockActive() : false;
 }

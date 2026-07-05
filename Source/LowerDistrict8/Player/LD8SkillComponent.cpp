@@ -128,3 +128,52 @@ void ULD8SkillComponent::ResetTimeDilation()
 		OwnerActor->CustomTimeDilation = 1.0f;
 	}
 }
+
+
+/* ==================== Skill State Getters ==================== */
+
+float ULD8SkillComponent::GetOverclockDurationPercent() const
+{
+	if (!bIsOverclockActive)
+	{
+		return 0.0f;
+	}
+
+	if (OverclockDuration <= 0.0f)
+	{
+		return 0.0f;
+	}
+
+	const float RemainingTime = OverclockDuration - OverclockElapsedTime;
+	return FMath::Clamp(RemainingTime / OverclockDuration, 0.0f, 1.0f);
+}
+
+float ULD8SkillComponent::GetSkillCooldownPercent() const
+{
+	if (bCanUseSkill)
+	{
+		return 1.0f;
+	}
+
+	if (bIsOverclockActive)
+	{
+		return 0.0f;
+	}
+
+	if (OverclockCooldown <= 0.0f)
+	{
+		return 1.0f;
+	}
+
+	return FMath::Clamp(CooldownElapsedTime / OverclockCooldown, 0.0f, 1.0f);
+}
+
+bool ULD8SkillComponent::IsOverclockActive() const
+{
+	return bIsOverclockActive;
+}
+
+bool ULD8SkillComponent::IsSkillReady() const
+{
+	return bCanUseSkill;
+}

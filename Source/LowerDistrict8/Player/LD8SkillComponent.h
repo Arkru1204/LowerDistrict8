@@ -54,6 +54,8 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Properties|Overclock")
 	bool bCanUseSkill = true;
 
+
+	/* ==================== Runtime Variables ==================== */
 private:
 	/* 오버클럭 경과 시간 */
 	float OverclockElapsedTime = 0.0f;
@@ -79,4 +81,23 @@ private:
 
 	/* 시간 배율 초기화 */
 	void ResetTimeDilation();
+
+
+	/* ==================== Skill State Getters ==================== */
+public:
+	/* 오버클럭 지속시간 남은 비율 반환 */
+	UFUNCTION(BlueprintPure, Category = "Skill|Overclock")
+	float GetOverclockDurationPercent() const;
+
+	/* 스킬 쿨타임 진행 비율 반환 */
+	UFUNCTION(BlueprintPure, Category = "Skill|Overclock")
+	float GetSkillCooldownPercent() const;
+
+	/* 오버클럭 활성화 여부 반환 */
+	UFUNCTION(BlueprintPure, Category = "Skill|Overclock")
+	bool IsOverclockActive() const;
+
+	/* 스킬 사용 가능 여부 반환 */
+	UFUNCTION(BlueprintPure, Category = "Skill|Overclock")
+	bool IsSkillReady() const;
 };

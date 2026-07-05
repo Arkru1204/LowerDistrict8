@@ -13,7 +13,7 @@ class LOWERDISTRICT8_API ALD8PlayerCharacter : public ALD8CharacterBase
 	GENERATED_BODY()
 
 
-	/* ==================== Player Character Lifecycle ==================== */
+	/* ==================== Lifecycle ==================== */
 public:
 	// Sets default values for this character's properties
 	ALD8PlayerCharacter();
@@ -30,7 +30,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
-	/* ==================== Player Character Getters ==================== */
+	/* ==================== Getters ==================== */
 public:
 	/* Returns CameraBoom subobject */
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
