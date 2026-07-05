@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "HUDWidget.generated.h"
+#include "LD8HUDWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class LOWERDISTRICT8_API UHUDWidget : public UUserWidget
+class LOWERDISTRICT8_API ULD8HUDWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	

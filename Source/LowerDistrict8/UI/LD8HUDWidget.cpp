@@ -1,19 +1,19 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/HUDWidget.h"
+#include "UI/LD8HUDWidget.h"
 
 #include "LD8CharacterBase.h"
 
 
-void UHUDWidget::NativeConstruct()
+void ULD8HUDWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
 	PlayerPawn = Cast<ALD8CharacterBase>(GetOwningPlayerPawn());
 }
 
-float UHUDWidget::GetHealth() const
+float ULD8HUDWidget::GetHealth() const
 {
 	const ALD8CharacterBase* Character = PlayerPawn;
 
