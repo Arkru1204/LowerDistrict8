@@ -37,7 +37,7 @@ public:
 	/* Returns FollowCamera subobject */
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 public:
-	/* Returns SkillComponent subobject */
+	/* 현재 크로스헤어 벌어짐 정도 */
 	UFUNCTION(BlueprintPure, Category = "Crosshair")
 	float GetCurrentCrosshairSpread() const;
 
@@ -61,7 +61,7 @@ private:
 	class ULD8SkillComponent* SkillComponent;
 
 
-	/* ==================== Properties ==================== */
+	/* ==================== Properties | Input Action ==================== */
 private:
 	/* 이동 InputAction */
 	UPROPERTY(EditAnywhere, Category = "Properties|Input Action")
@@ -75,6 +75,10 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Properties|Input Action")
 	class UInputAction* JumpAction;
 
+	/* 구르기 InputAction */
+	UPROPERTY(EditAnywhere, Category = "Properties|Input Action")
+	class UInputAction* RollAction;
+
 	/* 카메라 시점 변경 InputAction */
 	UPROPERTY(EditAnywhere, Category = "Properties|Input Action")
 	class UInputAction* ChangeViewAction;
@@ -86,6 +90,9 @@ private:
 	/* 스킬 InputAction */
 	UPROPERTY(EditAnywhere, Category = "Properties|Input Action")
 	class UInputAction* SkillAction;
+
+
+	/* ==================== Properties | Recoil & Crosshair ==================== */
 
 	/* 발사 시 카메라 쉐이크 */
 	UPROPERTY(EditAnywhere, Category = "Properties|Recoil")
@@ -119,21 +126,30 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Properties|Crosshair")
 	float CurrentCrosshairSpread = 0.4f;
 
+	/* 구르기 중 카메라 높이 보정 배율 */
+	UPROPERTY(EditAnywhere, Category = "Properties|Roll Camera")
+	float RollCameraHeightCompensationScale = 1.0f;
+
 
 	/* ==================== Input ==================== */
 private:
 	/* Move InputAction이 감지 될 때 호출되는 함수 */
 	void MoveInput(const struct FInputActionValue& Value);
+	/* Move InputAction이 끝났을 때 호출되는 함수 */
+	void MoveInputCompleted(const struct FInputActionValue& Value);
 	/* Look InputAction이 감지 될 때 호출되는 함수 */
 	void LookInput(const struct FInputActionValue& Value);
 	/* Jump InputAction이 감지 될 때 호출되는 함수 */
 	void JumpInput();
+	/* Roll InputAction이 감지 될 때 호출되는 함수 */
+	void RollInput();
 	/* ChangeView InputAction이 감지 될 때 호출되는 함수 */
 	void ChangeView();
 	/* Shoot InputAction이 감지 될 때 호출되는 함수 */
 	void ShootInput();
 	/* Skill InputAction이 감지 될 때 호출되는 함수 */
 	void Skill();
+
 
 	/* ==================== Runtime ==================== */
 private:
@@ -151,4 +167,13 @@ private:
 	void UpdateCrosshairSpread(float DeltaTime);
 	/* 크로스헤어 벌어짐 증가 */
 	void AddShootCrosshairSpread();
+
+private:
+	/* 기본 카메라 붐 상대 위치 */
+	FVector DefaultCameraBoomRelativeLocation = FVector::ZeroVector;
+protected:
+	/* 구르기 시작 시 호출 */
+	virtual void OnRollStarted(float CapsuleHeightDelta) override;
+	/* 구르기 종료 시 호출 */
+	virtual void OnRollEnded() override;
 };

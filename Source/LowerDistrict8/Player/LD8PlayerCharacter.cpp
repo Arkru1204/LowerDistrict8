@@ -30,13 +30,14 @@ ALD8PlayerCharacter::ALD8PlayerCharacter()
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 300.0f;
-	CameraBoom->SetRelativeLocation(FVector(0.0f, 75.0f, 75.0f)); // 캐릭터 머리 위쪽에 위치
-	CameraBoom->bUsePawnControlRotation = true; // 컨트롤러 회전에 따라 회전
+	CameraBoom->SetRelativeLocation(FVector(0.0f, 0.0f, 75.0f));	// CameraBoom 자체는 캐릭터 중심 위에 둠
+	CameraBoom->SocketOffset = FVector(0.0f, 75.0f, 0.0f);			// 어깨 오프셋은 SocketOffset으로 처리
+	CameraBoom->bUsePawnControlRotation = true;						// 카메라 붐이 컨트롤러 회전에 따라 회전
 
 	// 팔로우 카메라 생성
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-	FollowCamera->bUsePawnControlRotation = false; // 카메라가 컨트롤러 회전에 따라 회전하지 않음
+	FollowCamera->bUsePawnControlRotation = false;					// 카메라가 컨트롤러 회전에 따라 회전하지 않음
 
 	// 스킬 컴포넌트 생성
 	SkillComponent = CreateDefaultSubobject<ULD8SkillComponent>(TEXT("SkillComponent"));
@@ -63,6 +64,12 @@ ALD8PlayerCharacter::ALD8PlayerCharacter()
 void ALD8PlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// 캐릭터 기본 상태 저장
+	if (CameraBoom != nullptr)
+	{
+		DefaultCameraBoomRelativeLocation = CameraBoom->GetRelativeLocation();
+	}
 	
 	// 컴포넌트 값 확인
 	if (MoveAction == NULL)
@@ -71,6 +78,8 @@ void ALD8PlayerCharacter::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("[%s] LookAction is NULL"), *GetActorLabel());
 	if (JumpAction == NULL)
 		UE_LOG(LogTemp, Warning, TEXT("[%s] JumpAction is NULL"), *GetActorLabel());
+	if (RollAction == NULL)
+		UE_LOG(LogTemp, Warning, TEXT("[%s] RollAction is NULL"), *GetActorLabel());
 	if (ChangeViewAction == NULL)
 		UE_LOG(LogTemp, Warning, TEXT("[%s] ChangeViewAction is NULL"), *GetActorLabel());
 	if (ShootAction == NULL)
@@ -94,22 +103,14 @@ void ALD8PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ALD8PlayerCharacter::MoveInput);
-
-		// Looking
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &ALD8PlayerCharacter::MoveInputCompleted);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Canceled, this, &ALD8PlayerCharacter::MoveInputCompleted);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ALD8PlayerCharacter::LookInput);
-
-		// Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ALD8PlayerCharacter::DoJumpStart);
-
-		// Change View
+		EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Started, this, &ALD8PlayerCharacter::RollInput);
 		EnhancedInputComponent->BindAction(ChangeViewAction, ETriggerEvent::Started, this, &ALD8PlayerCharacter::ChangeView);
-
-		// Shoot
 		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &ALD8PlayerCharacter::ShootInput);
-
-		// Skill
 		EnhancedInputComponent->BindAction(SkillAction, ETriggerEvent::Started, this, &ALD8PlayerCharacter::Skill);
 	}
 }
@@ -124,6 +125,11 @@ void ALD8PlayerCharacter::MoveInput(const FInputActionValue& Value)
 	DoMove(InputVector.X, InputVector.Y);
 }
 
+void ALD8PlayerCharacter::MoveInputCompleted(const FInputActionValue& Value)
+{
+	ClearMoveInput();
+}
+
 void ALD8PlayerCharacter::LookInput(const FInputActionValue& Value)
 {
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
@@ -136,10 +142,15 @@ void ALD8PlayerCharacter::JumpInput()
 	DoJumpStart();
 }
 
+void ALD8PlayerCharacter::RollInput()
+{
+	DoRoll();
+}
+
 void ALD8PlayerCharacter::ChangeView()
 {
 	bIsLeftView = !bIsLeftView;
-	CameraBoom->SetRelativeLocation(FVector(0.0f, bIsLeftView ? 75.0f : -75.0f, 75.0f));
+	CameraBoom->SocketOffset = FVector(0.0f, bIsLeftView ? 75.0f : -75.0f, 0.0f);
 }
 
 void ALD8PlayerCharacter::ShootInput()
@@ -222,4 +233,28 @@ void ALD8PlayerCharacter::AddShootCrosshairSpread()
 float ALD8PlayerCharacter::GetCurrentCrosshairSpread() const
 {
 	return CurrentCrosshairSpread;
+}
+
+void ALD8PlayerCharacter::OnRollStarted(float CapsuleHeightDelta)
+{
+	Super::OnRollStarted(CapsuleHeightDelta);
+
+	if (CameraBoom == nullptr)
+		return;
+
+	// 구르기 중 카메라 위치 보정
+	FVector RollCameraLocation = DefaultCameraBoomRelativeLocation;
+	RollCameraLocation.Z += CapsuleHeightDelta * RollCameraHeightCompensationScale;
+	CameraBoom->SetRelativeLocation(RollCameraLocation);
+}
+
+void ALD8PlayerCharacter::OnRollEnded()
+{
+	Super::OnRollEnded();
+
+	if (CameraBoom == nullptr)
+		return;
+
+	// 구르기 종료 후 카메라 위치를 기본 위치로 복원
+	CameraBoom->SetRelativeLocation(DefaultCameraBoomRelativeLocation);
 }
