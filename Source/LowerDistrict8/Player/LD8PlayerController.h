@@ -38,6 +38,12 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Properties|UI")
 	TSubclassOf<class UUserWidget> HUDWidgetClass;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> WinScreenClass;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> LoseScreenClass;
+
 	/* 생성된 HUD 위젯 */
 	UPROPERTY()
 	class UUserWidget* HUDWidget;

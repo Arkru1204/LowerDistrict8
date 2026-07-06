@@ -17,4 +17,7 @@ class LOWERDISTRICT8_API ALD8GameModeBase : public AGameModeBase
 public:
 	/* 캐릭터가 죽었을 때 호출되는 함수 */
 	void PawnKilled(APawn* PawnKilled);
+
+private:
+	void EndGame(bool bIsPlayerWinner);
 };
