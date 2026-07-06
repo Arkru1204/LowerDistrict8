@@ -73,14 +73,14 @@ private:
 	//bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
 
 	/* 투사체 발사 방향 반환 */
-	FVector GetProjectileDirection() const;
+	FVector GetProjectileDirection(float SpreadAngle) const;
 
 	/* 총을 소유한 컨트롤러 반환 */
 	AController* GetOwnerController() const;
 
 public:
 	/* 공격 시 호출되는 함수 */
-	bool PullTrigger();
+	bool PullTrigger(float SpreadAngle = 0.0f);
 
 private:
 	/* 마지막 발사 시간 */

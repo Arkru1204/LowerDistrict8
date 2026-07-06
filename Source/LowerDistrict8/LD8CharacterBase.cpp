@@ -81,7 +81,7 @@ void ALD8CharacterBase::SpawnGun()
 	Gun->SetOwner(this);
 }
 
-bool ALD8CharacterBase::Shoot()
+bool ALD8CharacterBase::Shoot(float SpreadAngle)
 {
 	if (Gun == nullptr)
 	{
@@ -89,7 +89,7 @@ bool ALD8CharacterBase::Shoot()
 		return false;
 	}
 
-	return Gun->PullTrigger();
+	return Gun->PullTrigger(SpreadAngle);
 }
 
 

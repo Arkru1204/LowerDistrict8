@@ -84,6 +84,7 @@ void ALD8PlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	UpdateCrosshairSpread(DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -143,7 +144,7 @@ void ALD8PlayerCharacter::ChangeView()
 
 void ALD8PlayerCharacter::ShootInput()
 {
-	if (Shoot())
+	if (Shoot(CurrentCrosshairSpread))
 	{
 		OnShotFired();
 	}
@@ -165,6 +166,7 @@ void ALD8PlayerCharacter::Skill()
 void ALD8PlayerCharacter::OnShotFired()
 {
 	PlayFireCameraShake();
+	AddShootCrosshairSpread();
 }
 
 void ALD8PlayerCharacter::PlayFireCameraShake()
@@ -190,4 +192,34 @@ void ALD8PlayerCharacter::PlayFireCameraShake()
 
 	// 카메라 쉐이크 실행
 	PC->PlayerCameraManager->StartCameraShake(FireCameraShake, FireCameraShakeScale);
+}
+
+void ALD8PlayerCharacter::UpdateCrosshairSpread(float DeltaTime)
+{
+	const FVector Velocity = GetVelocity();
+	const float GroundSpeed = FVector(Velocity.X, Velocity.Y, 0.0f).Size();					// 지면 속도 계산 (X, Y 축만 고려)
+
+	const bool bIsMoving = GroundSpeed > 10.0f;												// 이동 중인지 확인 (속도가 10 이상이면 이동 중)
+	const float TargetSpread = bIsMoving ? MovementCrosshairSpread : MinCrosshairSpread;	// 이동 중이면 MovementCrosshairSpread, 아니면 MinCrosshairSpread
+
+	// 크로스헤어 벌어짐 값을 보간하여 점진적으로 변경
+	CurrentCrosshairSpread = FMath::FInterpTo(CurrentCrosshairSpread, TargetSpread, DeltaTime, CrosshairRecoverSpeed);
+
+	// 크로스헤어 벌어짐 값을 최소/최대 값으로 제한
+	CurrentCrosshairSpread = FMath::Clamp(CurrentCrosshairSpread, MinCrosshairSpread, MaxCrosshairSpread);
+}
+
+void ALD8PlayerCharacter::AddShootCrosshairSpread()
+{
+	// 발사 시 크로스헤어 벌어짐 값을 증가시키고 최소/최대 값으로 제한
+	CurrentCrosshairSpread = FMath::Clamp(
+		CurrentCrosshairSpread + ShootCrosshairSpreadAmount,
+		MinCrosshairSpread,
+		MaxCrosshairSpread
+	);
+}
+
+float ALD8PlayerCharacter::GetCurrentCrosshairSpread() const
+{
+	return CurrentCrosshairSpread;
 }

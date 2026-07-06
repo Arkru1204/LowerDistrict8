@@ -38,7 +38,7 @@ void ALD8Gun::Tick(float DeltaTime)
 
 }
 
-bool ALD8Gun::PullTrigger()
+bool ALD8Gun::PullTrigger(float SpreadAngle)
 {
 	// 발사 간격 체크
 	const float CurrentTime = GetWorld()->GetTimeSeconds();
@@ -61,7 +61,7 @@ bool ALD8Gun::PullTrigger()
 
 	// 총구 위치와 투사체 방향 계산
 	FVector MuzzleLocation = Muzzle->GetComponentLocation();
-	FVector ShootDirection = GetProjectileDirection();
+	FVector ShootDirection = GetProjectileDirection(SpreadAngle);
 	FRotator ProjectileRotation = ShootDirection.Rotation();
 
 	// 투사체 스폰 파라미터 설정
@@ -105,7 +105,7 @@ bool ALD8Gun::PullTrigger()
 //	return GetWorld()->LineTraceSingleByChannel(Hit, CameraLocation, LineEnd, ECollisionChannel::ECC_GameTraceChannel1, Params);
 //}
 
-FVector ALD8Gun::GetProjectileDirection() const
+FVector ALD8Gun::GetProjectileDirection(float SpreadAngle) const
 {
 	AController* OwnerController = GetOwnerController();
 	if (OwnerController == nullptr)
@@ -118,8 +118,16 @@ FVector ALD8Gun::GetProjectileDirection() const
 	FRotator CameraRotation;
 	OwnerController->GetPlayerViewPoint(CameraLocation, CameraRotation);
 
+	// 스프레드 각도 적용
+	FVector AimDirection = CameraRotation.Vector();
+	if (SpreadAngle > 0.0f)
+	{
+		const float SpreadRadians = FMath::DegreesToRadians(SpreadAngle);
+		AimDirection = FMath::VRandCone(AimDirection, SpreadRadians);
+	}
+
 	// 투사체가 날아갈 끝 지점 계산
-	FVector AimEnd = CameraLocation + CameraRotation.Vector() * AimRange;
+	FVector AimEnd = CameraLocation + AimDirection * AimRange;
 
 	// 라인 트레이스 파라미터 세팅
 	FHitResult Hit;

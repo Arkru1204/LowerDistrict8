@@ -77,7 +77,7 @@ protected:
 	void SpawnGun();
 public:
 	/* 실제 공격 처리 함수 */
-	bool Shoot();
+	bool Shoot(float SpreadAngle = 0.0f);
 
 
 	/* ==================== Health ==================== */

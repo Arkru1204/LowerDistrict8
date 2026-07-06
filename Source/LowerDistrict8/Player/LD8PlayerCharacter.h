@@ -36,6 +36,10 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/* Returns FollowCamera subobject */
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+public:
+	/* Returns SkillComponent subobject */
+	UFUNCTION(BlueprintPure, Category = "Crosshair")
+	float GetCurrentCrosshairSpread() const;
 
 
 	/* ==================== Components ==================== */
@@ -89,7 +93,31 @@ private:
 
 	/* 카메라 쉐이크 강도 */
 	UPROPERTY(EditAnywhere, Category = "Properties|Recoil")
-	float FireCameraShakeScale = 1.0f;
+	float FireCameraShakeScale = 0.5f;
+
+	/* 기본 크로스헤어 벌어짐 */
+	UPROPERTY(EditAnywhere, Category = "Properties|Crosshair")
+	float MinCrosshairSpread = 0.4f;
+
+	/* 최대 크로스헤어 벌어짐 */
+	UPROPERTY(EditAnywhere, Category = "Properties|Crosshair")
+	float MaxCrosshairSpread = 5.0f;
+
+	/* 이동 중 추가되는 크로스헤어 벌어짐 */
+	UPROPERTY(EditAnywhere, Category = "Properties|Crosshair")
+	float MovementCrosshairSpread = 1.5f;
+
+	/* 한 발 발사할 때 증가하는 크로스헤어 벌어짐 */
+	UPROPERTY(EditAnywhere, Category = "Properties|Crosshair")
+	float ShootCrosshairSpreadAmount = 1.0f;
+
+	/* 크로스헤어가 다시 줄어드는 속도 */
+	UPROPERTY(EditAnywhere, Category = "Properties|Crosshair")
+	float CrosshairRecoverSpeed = 5.0f;
+
+	/* 현재 크로스헤어 벌어짐 정도 */
+	UPROPERTY(VisibleAnywhere, Category = "Properties|Crosshair")
+	float CurrentCrosshairSpread = 0.4f;
 
 
 	/* ==================== Input ==================== */
@@ -112,8 +140,15 @@ private:
 	/* 시점 변경 처리 변수 */
 	bool bIsLeftView = true;
 
+private:
 	/* 발사 성공 시 플레이어 피드백 처리 */
 	void OnShotFired();
+
 	/* 카메라 쉐이크 재생 */
 	void PlayFireCameraShake();
+
+	/* 크로스헤어 업데이트 */
+	void UpdateCrosshairSpread(float DeltaTime);
+	/* 크로스헤어 벌어짐 증가 */
+	void AddShootCrosshairSpread();
 };
