@@ -57,7 +57,7 @@ void ULD8SkillComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 			bCanUseSkill = true;
 			CooldownElapsedTime = 0.0f;
 
-			UE_LOG(LogTemp, Warning, TEXT("[%s] Skill Cooldown End"), *GetOwner()->GetActorLabel());
+			UE_LOG(LogTemp, Warning, TEXT("[%s] Skill Cooldown End"), *GetOwner()->GetName());
 		}
 	}
 }
@@ -75,7 +75,7 @@ void ULD8SkillComponent::UseSkill()
 
 	if (!CanUseSkill())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("[%s] Skill is not ready"), *GetOwner()->GetActorLabel());
+		UE_LOG(LogTemp, Warning, TEXT("[%s] Skill is not ready"), *GetOwner()->GetName());
 		return;
 	}
 
@@ -107,7 +107,7 @@ void ULD8SkillComponent::BeginOverclock()
 	// 플레이어 본인은 느려진 시간을 보정해서 상대적으로 빠르게 움직이게
 	OwnerActor->CustomTimeDilation = OverclockPlayerTimeScale / SafeTimeDilation;
 
-	UE_LOG(LogTemp, Warning, TEXT("[%s] Overclock Start"), *OwnerActor->GetActorLabel());
+	UE_LOG(LogTemp, Warning, TEXT("[%s] Overclock Start"), *OwnerActor->GetName());
 }
 
 void ULD8SkillComponent::EndOverclock()
@@ -122,7 +122,7 @@ void ULD8SkillComponent::EndOverclock()
 	OverclockElapsedTime = 0.0f;
 	CooldownElapsedTime = 0.0f;
 
-	UE_LOG(LogTemp, Warning, TEXT("[%s] Overclock End"), *OwnerActor->GetActorLabel());
+	UE_LOG(LogTemp, Warning, TEXT("[%s] Overclock End"), *OwnerActor->GetName());
 }
 
 void ULD8SkillComponent::ResetTimeDilation()

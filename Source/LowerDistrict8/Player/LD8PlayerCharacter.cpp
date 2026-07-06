@@ -73,19 +73,19 @@ void ALD8PlayerCharacter::BeginPlay()
 	
 	// 컴포넌트 값 확인
 	if (MoveAction == NULL)
-		UE_LOG(LogTemp, Warning, TEXT("[%s] MoveAction is NULL"), *GetActorLabel());
+		UE_LOG(LogTemp, Warning, TEXT("[%s] MoveAction is NULL"), *GetName());
 	if (LookAction == NULL)
-		UE_LOG(LogTemp, Warning, TEXT("[%s] LookAction is NULL"), *GetActorLabel());
+		UE_LOG(LogTemp, Warning, TEXT("[%s] LookAction is NULL"), *GetName());
 	if (JumpAction == NULL)
-		UE_LOG(LogTemp, Warning, TEXT("[%s] JumpAction is NULL"), *GetActorLabel());
+		UE_LOG(LogTemp, Warning, TEXT("[%s] JumpAction is NULL"), *GetName());
 	if (RollAction == NULL)
-		UE_LOG(LogTemp, Warning, TEXT("[%s] RollAction is NULL"), *GetActorLabel());
+		UE_LOG(LogTemp, Warning, TEXT("[%s] RollAction is NULL"), *GetName());
 	if (ChangeViewAction == NULL)
-		UE_LOG(LogTemp, Warning, TEXT("[%s] ChangeViewAction is NULL"), *GetActorLabel());
+		UE_LOG(LogTemp, Warning, TEXT("[%s] ChangeViewAction is NULL"), *GetName());
 	if (ShootAction == NULL)
-		UE_LOG(LogTemp, Warning, TEXT("[%s] ShootAction is NULL"), *GetActorLabel());
+		UE_LOG(LogTemp, Warning, TEXT("[%s] ShootAction is NULL"), *GetName());
 	if (SkillAction == NULL)
-		UE_LOG(LogTemp, Warning, TEXT("[%s] SkillAction is NULL"), *GetActorLabel());
+		UE_LOG(LogTemp, Warning, TEXT("[%s] SkillAction is NULL"), *GetName());
 }
 
 // Called every frame
@@ -165,7 +165,7 @@ void ALD8PlayerCharacter::Skill()
 {
 	if (SkillComponent == nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("[%s] SkillComponent is NULL"), *GetActorLabel());
+		UE_LOG(LogTemp, Warning, TEXT("[%s] SkillComponent is NULL"), *GetName());
 		return;
 	}
 

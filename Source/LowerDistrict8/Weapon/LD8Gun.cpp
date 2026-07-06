@@ -55,7 +55,7 @@ bool ALD8Gun::PullTrigger(float SpreadAngle)
 	// 투사체 클래스 체크
 	if (ProjectileClass == nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("[%s] ProjectileClass is NULL"), *GetActorLabel());
+		UE_LOG(LogTemp, Warning, TEXT("[%s] ProjectileClass is NULL"), *GetName());
 		return false;
 	}
 

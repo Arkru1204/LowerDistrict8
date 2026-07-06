@@ -19,7 +19,7 @@ void ALD8PlayerController::BeginPlay()
 
 	if (DefaultMappingContexts.IsEmpty())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("[%s] DefaultMappingContexts is NULL"), *GetActorLabel());
+		UE_LOG(LogTemp, Warning, TEXT("[%s] DefaultMappingContexts is NULL"), *GetName());
 	}
 
 	// HUD 생성
@@ -36,7 +36,7 @@ void ALD8PlayerController::BeginPlay()
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("[%s] HUDWidgetClass is NULL"), *GetActorLabel());
+			UE_LOG(LogTemp, Warning, TEXT("[%s] HUDWidgetClass is NULL"), *GetName());
 		}
 	}
 }

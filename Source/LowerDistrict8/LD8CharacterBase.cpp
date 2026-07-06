@@ -26,7 +26,7 @@ void ALD8CharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Warning, TEXT("[%s] Generate"), *GetActorLabel());
+	UE_LOG(LogTemp, Warning, TEXT("[%s] Generate"), *GetName());
 
 	SpawnGun();
 
@@ -57,7 +57,7 @@ float ALD8CharacterBase::TakeDamage(float DamageAmount, struct FDamageEvent cons
 	DamageToApply = FMath::Min(CurrentHP, DamageToApply); // CurrentHP보다 데미지가 클 경우 CurrentHP만큼만 데미지 적용
 	CurrentHP -= DamageToApply;
 
-	UE_LOG(LogTemp, Warning, TEXT("[%s] Health left: %f"), *GetActorLabel(), CurrentHP);
+	UE_LOG(LogTemp, Warning, TEXT("[%s] Health left: %f"), *GetName(), CurrentHP);
 
 	if (IsDead())
 	{
@@ -133,7 +133,7 @@ void ALD8CharacterBase::DoRoll()
 
 	if (RollMontage == nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("[%s] RollMontage is NULL"), *GetActorLabel());
+		UE_LOG(LogTemp, Warning, TEXT("[%s] RollMontage is NULL"), *GetName());
 		return;
 	}
 
@@ -177,7 +177,7 @@ void ALD8CharacterBase::DoRoll()
 
 	if (MontageLength <= 0.0f)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("[%s] RollMontage Play Failed"), *GetActorLabel());
+		UE_LOG(LogTemp, Warning, TEXT("[%s] RollMontage Play Failed"), *GetName());
 		EndRoll();
 	}
 }
@@ -300,7 +300,7 @@ void ALD8CharacterBase::SpawnGun()
 {
 	if (GunClass == nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("[%s] GunClass is NULL"), *GetActorLabel());
+		UE_LOG(LogTemp, Warning, TEXT("[%s] GunClass is NULL"), *GetName());
 		return;
 	}
 
@@ -313,7 +313,7 @@ bool ALD8CharacterBase::Shoot(float SpreadAngle)
 {
 	if (Gun == nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("[%s] Gun is NULL"), *GetActorLabel());
+		UE_LOG(LogTemp, Warning, TEXT("[%s] Gun is NULL"), *GetName());
 		return false;
 	}
 
