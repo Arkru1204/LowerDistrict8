@@ -67,6 +67,12 @@ void ULD8SkillComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 
 void ULD8SkillComponent::UseSkill()
 {
+	if (bIsOverclockActive)
+	{
+		EndOverclock();
+		return;
+	}
+
 	if (!CanUseSkill())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("[%s] Skill is not ready"), *GetOwner()->GetActorLabel());
